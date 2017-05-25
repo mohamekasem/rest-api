@@ -22,6 +22,11 @@ app.use('/api', require('./routes/api'));
 //error handling middl ware
 
 app.use(function (err, req, res, next) {
+	console.log(err, 'err');
+	// console.log(req, 'req');
+	// console.log(res,'res');
+	console.log(next,'next');
+
 	console.log(err)
 	res.status(422).send({error: err._message})
 	
