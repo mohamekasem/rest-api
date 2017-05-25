@@ -1,39 +1,32 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
 //set express app
 
 const app = express();
-
 
 //connect to mongodb
 
 mongoose.connect('mongodb://localhost/ninjago');
 mongoose.Promise = global.Promise;
 
-app.use(express.static('public'));
-
-app.use(bodyParser.json());
 
  // initialize routes
+ require('./config/middleware/middleware.js')(app, express);
 
-app.use('/api', require('./routes/api'));
+ app.use('/api', require('./config/routes/api'));
 
 //error handling middl ware
 
 app.use(function (err, req, res, next) {
-	console.log(err, 'err');
-	// console.log(req, 'req');
-	// console.log(res,'res');
-	console.log(next,'next');
 
-	console.log(err)
 	res.status(422).send({error: err._message})
 	
-})
+});
 
 //listen for requests
 
 let port = process.env.port || 4000;
 
-app.listen(port,()=> console.log('now listen on port:' + port));
+app.listen(port, function (){ console.log('now listen on port:' + port) });

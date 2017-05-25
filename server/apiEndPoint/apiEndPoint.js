@@ -1,9 +1,8 @@
-const Ninja = require('../models/ninja');
+const Ninja = require('../db.models/ninja');
 
 module.exports = {
-	getTheGeoLocation: (req, res, next)=>{
+	getTheGeoLocation: function (req, res, next){
 
-		console.log(next,'what');
 		let lng = parseFloat(req.query.lng);
 		let lat = parseFloat(req.query.lat);
 
@@ -11,34 +10,34 @@ module.exports = {
 			{type: 'Point', coordinates: [lng, lat]},
 			{maxDistance: 100000, spherical: true
 			})
-		.then((ninjas)=>{
+		.then( function (ninjas){
 			res.send(ninjas);
 		})
 		.catch(next);
 	},
 
-	postNewNinja : (req, res, next)=>{
+	postNewNinja : function(req, res, next){
 		Ninja.create(req.body)
-		.then((ninja)=>{
+		.then(function(ninja){
 			res.send(ninja);
 		})
 		.catch(next);
 	},
 
-	updateNinja : (req, res, next)=>{
+	updateNinja : function (req, res, next){
 		Ninja.findByIdAndUpdate({_id: req.params.id}, req.body)
-		.then(()=>{
+		.then( function (){
 			Ninja.findOne({_id: req.params.id})
-			.then((ninja)=>{
+			.then(function(ninja){
 				res.send(ninja);
 			});
 		})
 		.catch(next);
 	},
 	
-	deleteNinja :  (req, res, next)=>{
+	deleteNinja :  function (req, res, next){
 		Ninja.findByIdAndRemove({_id: req.params.id})
-		.then((ninja)=>{
+		.then(function (ninja){
 			res.send(ninja);
 		})
 		.catch(next);
